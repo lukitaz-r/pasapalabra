@@ -101,7 +101,7 @@ Si prefieres usar GitHub Pages estrictamente:
 ```mermaid
 graph LR
     User[Usuario] -->|Visita| Frontend["Frontend -) (Vercel/GH Pages)"]
-    Frontend -->|API Request| Backend[Backend (Render)]
+    Frontend -->|API Request| Backend["Backend -) (Render)"]
     Backend -->|Query| DB[(MongoDB Atlas)]
 ```
 
