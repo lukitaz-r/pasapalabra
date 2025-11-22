@@ -202,7 +202,7 @@ curl -X POST http://localhost:5000/api/questions \
 
 Aquí esta una guía rápida de como desplegar la página a internet para probar su funcionamiento en producción.
 
-[Guía de despliegue](https://github.com/lucacorarmiz/pasapalabra/blob/main/DEPLOYMENT.md)
+[Guía de despliegue](https://github.com/lukitaz-r/pasapalabra/blob/main/DEPLOYMENT.md)
 
 ## 📄 Licencia
 MIT
