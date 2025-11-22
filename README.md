@@ -208,4 +208,4 @@ Aquí esta una guía rápida de como desplegar la página a internet para probar
 MIT
 
 ## 👨‍💻 Autor
-Desarrollado por Luca Ramirez, con ❤️ para el juego de Pasapalabra
+Desarrollado por Luca Ramirez, con ❤️.
