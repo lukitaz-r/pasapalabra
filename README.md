@@ -198,8 +198,14 @@ curl -X POST http://localhost:5000/api/questions \
 - `npm start` - Inicia frontend y backend juntos
 - `npm run build` - Construye para producción
 
+## ☁️ Como desplegar la página
+
+Aquí esta una guía rápida de como desplegar la página a internet para probar su funcionamiento en producción.
+
+[Guía de despliegue](https://github.com/lucacorarmiz/pasapalabra/blob/main/DEPLOYMENT.md)
+
 ## 📄 Licencia
 MIT
 
 ## 👨‍💻 Autor
-Desarrollado con ❤️ para el juego de Pasapalabra
+Desarrollado por Luca Ramirez, con ❤️ para el juego de Pasapalabra
