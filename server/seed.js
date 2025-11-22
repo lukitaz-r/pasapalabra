@@ -11,7 +11,7 @@ const sampleQuestions = [
   // Letra A
   { letter: "A", question: "Comienza con A. Reptil constrictor sudamericano de gran tamaño.", answer: "ANACONDA" },
   { letter: "A", question: "Comienza con A. Capital de Grecia.", answer: "ATENAS" },
-  { letter: "A", question: "Comienza con A. Fruto tropical amarillo con forma ovalada y piel rugosa.", answer: "AGUACATE" },
+  { letter: "A", question: "Comienza con A. Fruto tropical verde con forma ovalada y piel rugosa.", answer: "AGUACATE" },
   
   // Letra B
   { letter: "B", question: "Contiene B. Instrumento de viento de madera con doble lengüeta.", answer: "OBOE" },
