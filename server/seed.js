@@ -21,7 +21,7 @@ const sampleQuestions = [
   // Letra C
   { letter: "C", question: "Comienza con C. Metal precioso de color rojizo.", answer: "COBRE" },
   { letter: "C", question: "Comienza con C. Bebida caliente hecha con granos tostados.", answer: "CAFE" },
-  { letter: "C", question: "Comienza con C. Animal felino doméstico.", answer: "GATO" },
+  { letter: "C", question: "Comienza con C. Come zanahorias.", answer: "CONEJO" },
   
   // Letra D
   { letter: "D", question: "Comienza con D. Juego de mesa con fichas numeradas.", answer: "DOMINO" },
@@ -45,7 +45,7 @@ const sampleQuestions = [
   
   // Letra H
   { letter: "H", question: "Comienza con H. Día actual.", answer: "HOY" },
-  { letter: "H", question: "Comienza con H. Insecto que produce miel.", answer: "ABEJA" },
+  { letter: "H", question: "Comienza con H. Insecto que crea sus imperios abajo de la tierra.", answer: "HORMIGA" },
   { letter: "H", question: "Comienza con H. Órgano vital que bombea sangre.", answer: "CORAZON" },
   
   // Letra I

@@ -128,24 +128,20 @@
 }
 
 .header {
-  margin-bottom: 20px;
-  background: white;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  color: #333;
+  color: white;
   font-size: 2.5em;
-  margin: 0 0 15px 0;
   font-weight: bold;
 }
 
 .stats {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   font-size: 1.2em;
   flex-wrap: wrap;
 }
@@ -158,17 +154,17 @@
 
 .stat-label {
   font-weight: bold;
-  color: #555;
+  color: rgba(255, 255, 255, 0.836);
 }
 
 .stat-value {
-  color: #2196F3;
+  color: #67f321;
   font-weight: bold;
   font-size: 1.3em;
 }
 
 .time-warning {
-  color: #f44336;
+  color: #f71000;
   animation: pulse 1s infinite;
 }
 
@@ -198,12 +194,9 @@
 }
 
 .side-button {
-  writing-mode: vertical-rl;
   text-orientation: upright;
-  padding: 30px 20px !important;
   font-size: 1.2em !important;
-  min-height: 200px;
-  letter-spacing: 5px;
+  letter-spacing: 3px;
   font-weight: bold;
 }
 
@@ -274,9 +267,9 @@
 
 .question-panel {
   background: white;
-  padding: 25px;
+  padding: 15px;
   border-radius: 15px;
-  margin: 20px auto;
+  margin: 10px auto;
   max-width: 700px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

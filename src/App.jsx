@@ -307,7 +307,7 @@ function App() {
         <h1 className="title">Pasapalabra</h1>
         <div className="stats">
           <div className="stat-item">
-            <span className="stat-label">Tiempo (Letra {currentLetter}):</span>
+            <span className="stat-label">Tiempo:</span>
             <span className={`stat-value ${currentTime <= 5 ? 'time-warning' : ''}`}>
               {formatTime(currentTime)}
             </span>
