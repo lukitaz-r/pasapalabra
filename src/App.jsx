@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
+import Menu from './components/Menu';
+import Game from './components/Game';
+import GameOver from './components/GameOver';
 
 function App() {
   // Estados del juego
@@ -17,16 +20,6 @@ function App() {
   const [gameActive, setGameActive] = useState(true);
   const [answerInput, setAnswerInput] = useState("");
   const timerRef = useRef(null);
-  const inputRef = useRef(null);
-
-  // Inicializar tiempo independiente para cada letra (30 segundos por letra)
-  const initializeLetterTimes = () => {
-    const times = {};
-    questions.forEach(q => {
-      times[q.letter] = 30; // 30 segundos por letra
-    });
-    return times;
-  };
 
   // Función para obtener preguntas aleatorias del servidor
   const fetchQuestions = async () => {
@@ -56,17 +49,11 @@ function App() {
       } else {
         setCountdown(null); // Termina el countdown, empieza el juego
       }
-    }, 1000);
+    }, 1600);
 
     return () => clearTimeout(timer);
   }, [countdown]);
 
-  // Auto-focus input cuando cambia la pregunta (solo si no hay countdown)
-  useEffect(() => {
-    if (gameStarted && gameActive && inputRef.current && countdown === null) {
-      inputRef.current.focus();
-    }
-  }, [currentIndex, gameStarted, gameActive, countdown]);
 
   // Timer independiente para cada letra (solo si no hay countdown)
   useEffect(() => {
@@ -105,6 +92,7 @@ function App() {
         clearInterval(timerRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, gameActive, gameStarted, letterStates, countdown]);
 
   // Buscar siguiente pregunta sin responder
@@ -223,184 +211,42 @@ function App() {
     setAnswerInput("");
   };
 
-  // Formato del tiempo en segundos
-  const formatTime = (seconds) => {
-    return `${seconds}s`;
-  };
-
-  // Obtener color según estado de la letra
-  const getLetterColor = (letter) => {
-    const state = letterStates[letter];
-    if (state === "correct") return "#4CAF50";
-    if (state === "incorrect") return "#f44336";
-    if (state === "pasapalabra") return "#2196F3";
-    return "#e0e0e0";
-  };
-
-  // Valores seguros para cuando no hay preguntas cargadas
-  const currentLetter = questions.length > 0 ? questions[currentIndex]?.letter : 'A';
-  const currentTime = letterTimes[currentLetter] || 0;
-
-  // Mostrar menú inicial si el juego no ha comenzado
   if (!gameStarted) {
     return (
-      <div className="app-container">
-        <div className="menu-screen">
-          <h1 className="menu-title">Pasapalabra</h1>
-          <p className="menu-subtitle">¿Estás listo para el desafío?</p>
-
-          <div className="difficulty-selector">
-            <p className="difficulty-label">Selecciona la dificultad:</p>
-            <div className="difficulty-buttons">
-              <button
-                className={`btn-difficulty easy ${difficulty === 'easy' ? 'active' : ''}`}
-                onClick={() => setDifficulty('easy')}
-              >
-                FÁCIL
-              </button>
-              <button
-                className={`btn-difficulty medium ${difficulty === 'medium' ? 'active' : ''}`}
-                onClick={() => setDifficulty('medium')}
-              >
-                MEDIO
-              </button>
-              <button
-                className={`btn-difficulty hard ${difficulty === 'hard' ? 'active' : ''}`}
-                onClick={() => setDifficulty('hard')}
-              >
-                DIFÍCIL
-              </button>
-            </div>
-          </div>
-
-          {error && (
-            <div className="error-message">
-              <p>{error}</p>
-              <p className="error-hint">Ejecuta: npm run seed (para poblar la BD) y npm run server (para iniciar el backend)</p>
-            </div>
-          )}
-
-          <button
-            onClick={startGame}
-            className="btn menu-button"
-            disabled={loading}
-          >
-            {loading ? 'CARGANDO...' : 'INICIAR JUEGO'}
-          </button>
-        </div>
-      </div>
+      <Menu
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        startGame={startGame}
+        loading={loading}
+        error={error}
+      />
     );
   }
 
   return (
-    <div className="app-container">
-      {/* Countdown Overlay */}
-      {countdown !== null && (
-        <div className="countdown-overlay">
-          <div className="countdown-number">
-            {countdown > 0 ? countdown : '¡Ya!'}
-          </div>
-        </div>
-      )}
-
-      <header className="header">
-        <h1 className="title">Pasapalabra</h1>
-        <div className="stats">
-          <div className="stat-item">
-            <span className="stat-label">Tiempo:</span>
-            <span className={`stat-value ${currentTime <= 5 ? 'time-warning' : ''}`}>
-              {formatTime(currentTime)}
-            </span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Aciertos:</span>
-            <span className="stat-value">{score}/26</span>
-          </div>
-        </div>
-      </header>
-
-      <div className="question-panel">
-        <p className="question-text">
-          {gameActive ? questions[currentIndex]?.question : "¡Juego terminado!"}
-        </p>
-      </div>
-
-      <div className="game-layout">
-        {/* Botón izquierdo - PASAPALABRA */}
-        <div className="side-button-container left">
-          <button
-            onClick={handlePasapalabra}
-            className="btn btn-pasapalabra side-button"
-            disabled={!gameActive || countdown !== null}
-          >
-            PASAPALABRA
-          </button>
-        </div>
-
-        {/* Rosco central */}
-        <div className="center-content">
-          <div className="rosco-container">
-            {questions.map((q, index) => {
-              const angle = (360 / 26) * index;
-              const radius = 200;
-              const x = Math.sin((angle * Math.PI) / 180) * radius;
-              const y = -Math.cos((angle * Math.PI) / 180) * radius;
-              const isActive = index === currentIndex;
-              const letterTime = letterTimes[q.letter];
-              const isLowTime = letterTime <= 5;
-              const isCorrect = letterStates[q.letter] === "correct";
-              const isIncorrect = letterStates[q.letter] === "incorrect";
-
-              return (
-                <div
-                  key={q.letter}
-                  className={`letter ${isActive ? 'active' : ''} ${isLowTime && !letterStates[q.letter] ? 'low-time' : ''} ${isCorrect ? 'correct' : ''} ${isIncorrect ? 'incorrect' : ''}`}
-                  style={{
-                    transform: `translate(${x}px, ${y}px)`,
-                    backgroundColor: getLetterColor(q.letter)
-                  }}
-                >
-                  <span className="letter-text">{q.letter}</span>
-                  {!isCorrect && !isIncorrect && (
-                    <span className="letter-time">{letterTime}</span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          <form onSubmit={handleSubmitAnswer} className="input-section">
-            <input
-              ref={inputRef}
-              type="text"
-              value={answerInput}
-              onChange={(e) => setAnswerInput(e.target.value)}
-              placeholder="Escribe tu respuesta..."
-              className="answer-input"
-              disabled={!gameActive || countdown !== null}
-              autoComplete="off"
-            />
-          </form>
-        </div>
-
-        {/* Botón derecho - VOLVER AL MENÚ */}
-        <div className="side-button-container right">
-          <button onClick={resetGame} className="btn btn-reset side-button">
-            VOLVER AL MENÚ
-          </button>
-        </div>
-      </div>
-
+    <>
+      <Game
+        questions={questions}
+        currentIndex={currentIndex}
+        letterStates={letterStates}
+        letterTimes={letterTimes}
+        score={score}
+        gameActive={gameActive}
+        answerInput={answerInput}
+        setAnswerInput={setAnswerInput}
+        handlePasapalabra={handlePasapalabra}
+        handleSubmitAnswer={handleSubmitAnswer}
+        resetGame={resetGame}
+        countdown={countdown}
+      />
       {!gameActive && (
-        <div className="game-over">
-          <h2>¡Juego Terminado!</h2>
-          <p>Puntuación Final: {score}/26</p>
-          <button onClick={resetGame} className="btn btn-reset">
-            VOLVER AL MENÚ
-          </button>
-        </div>
+        <GameOver
+          score={score}
+          totalQuestions={questions.length}
+          resetGame={resetGame}
+        />
       )}
-    </div>
+    </>
   );
 }
 

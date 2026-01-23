@@ -8,36 +8,35 @@ router.get('/random', async (req, res) => {
   try {
     const { difficulty = 'medium' } = req.query;
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const randomQuestions = [];
 
-    // Para cada letra, obtener una pregunta aleatoria
-    for (const letter of letters) {
-      // Intentar buscar por dificultad específica
-      let count = await Question.countDocuments({ letter, difficulty });
-      let question;
-
-      if (count > 0) {
-        const random = Math.floor(Math.random() * count);
-        question = await Question.findOne({ letter, difficulty }).skip(random);
-      } else {
-        // Si no hay preguntas de esa dificultad, buscar cualquiera para esa letra (fallback)
-        count = await Question.countDocuments({ letter });
-        if (count === 0) {
-          return res.status(404).json({ 
-            error: `No hay preguntas disponibles para la letra ${letter}` 
-          });
-        }
-        const random = Math.floor(Math.random() * count);
-        question = await Question.findOne({ letter }).skip(random);
+    // Create an array of promises to fetch questions in parallel
+    const questionPromises = letters.map(async (letter) => {
+      // Try to find by specific difficulty
+      const countSpecific = await Question.countDocuments({ letter, difficulty });
+      
+      if (countSpecific > 0) {
+        const random = Math.floor(Math.random() * countSpecific);
+        return Question.findOne({ letter, difficulty }).skip(random);
       }
       
-      randomQuestions.push({
-        letter: question.letter,
-        question: question.question,
-        answer: question.answer,
-        difficulty: question.difficulty
-      });
-    }
+      // Fallback: any difficulty for this letter
+      const countAny = await Question.countDocuments({ letter });
+      if (countAny === 0) {
+        throw new Error(`No hay preguntas disponibles para la letra ${letter}`);
+      }
+      
+      const random = Math.floor(Math.random() * countAny);
+      return Question.findOne({ letter }).skip(random);
+    });
+
+    const questions = await Promise.all(questionPromises);
+
+    const randomQuestions = questions.map(q => ({
+      letter: q.letter,
+      question: q.question,
+      answer: q.answer,
+      difficulty: q.difficulty
+    }));
 
     res.json(randomQuestions);
   } catch (error) {
